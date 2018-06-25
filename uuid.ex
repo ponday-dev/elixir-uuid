@@ -1,24 +1,15 @@
 defmodule UUID do
-    def uuid() do
+    def uuid(case: :lower), do: uuid() |> String.downcase
+    def uuid(case: :upper), do: uuid()
+    def uuid do
         "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx"
-        |> to_charlist
+        |> String.codepoints
         |> Enum.map(&(gen_letter &1))
         |> List.to_string
     end
-
-    defp gen_letter(?x) do
-        to_hex(:rand.uniform(16) - 1)
-    end
-    defp gen_letter(?y) do
-        to_hex(:rand.uniform(4) + 7)
-    end
+    
+    defp gen_letter("x"), do: Integer.to_string(:rand.uniform(16) - 1, 16)
+    defp gen_letter("y"), do: Integer.to_string(:rand.uniform(4) + 7, 16)
     defp gen_letter(c), do: c
-
-    defp to_hex(n) when n < 10 do
-        ?0 + n
-    end
-    defp to_hex(n) do
-        ?a + n - 10
-    end
 end
 
